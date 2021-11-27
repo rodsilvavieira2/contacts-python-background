@@ -50,7 +50,7 @@ class Users(Connection):
 
         return data
 
-    def select_id(self, id: int):
+    def select_by_id(self, id: int):
         c = self.connection.cursor()
 
         sql = f'SELECT * FORM users WHERE id = {id}'
@@ -75,7 +75,7 @@ class Users(Connection):
 
         return data
 
-    def select_email(self, email: str):
+    def select_by_email(self, email: str):
         c = self.connection.cursor()
 
         sql = f"SELECT * FORM users WHERE email = '{email}' "
