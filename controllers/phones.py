@@ -1,21 +1,21 @@
-from models.emails import Emails
+from models.phones import Phones
 from helpers.http_responses import HttpResponses
 
 
-class CreateEmailController:
+class CreatePhoneController:
 
     @staticmethod
     def execute(data: dict):
         try:
-            emails = Emails()
+            phones = Phones()
 
-            email_attr = data['email']
+            phone_attr = data['phone']
 
-            isExistingEmail = emails.select_by_email(email_attr)
+            isExistingEmail = phones.select_by_phone(phone_attr)
 
             if isExistingEmail:
                 return HttpResponses.bad_request(
-                    f'This EMAIL ({email_attr}) already exits'
+                    f'This PHONE ({phone_attr}) already exits'
                 )
 
             return HttpResponses.created()
@@ -24,18 +24,18 @@ class CreateEmailController:
             return HttpResponses.server_error()
 
 
-class DeleteEmailByIdController:
+class DeletePhoneByIdController:
 
     @staticmethod
     def execute(id: int):
         try:
-            emails = Emails()
+            phones = Phones()
 
-            resp = emails.delete(id)
+            resp = phones.delete(id)
 
             if not resp:
                 return HttpResponses.not_found(
-                    f'Email not found'
+                    f'Phone not found'
                 )
 
             return HttpResponses.no_content()
@@ -44,18 +44,18 @@ class DeleteEmailByIdController:
             return HttpResponses.server_error()
 
 
-class UpdateEmailByIdController:
+class UpdatePhoneByIdController:
 
     @staticmethod
     def execute(id: int, data: dict):
         try:
-            emails = Emails()
+            phones = Phones()
 
-            resp = emails.update(id, data)
+            resp = phones.update(id, data)
 
             if not resp:
                 return HttpResponses.not_found(
-                    f'Email not found'
+                    f'Phone not found'
                 )
 
             return HttpResponses.ok()
