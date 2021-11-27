@@ -3,7 +3,7 @@ from helpers.parser_data import parse_dict_to_tuple, parser_null_values
 from datetime import datetime
 
 
-class Users(Connection):
+class Emails(Connection):
     def insert(self, data: dict) -> bool:
         c = self.connection.cursor()
 
