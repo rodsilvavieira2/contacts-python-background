@@ -3,7 +3,7 @@ from helpers.parser_data import parse_dict_to_tuple, parser_null_values
 from datetime import datetime
 
 
-class Users(Connection):
+class Contacts(Connection):
     def insert(self, data: dict) -> bool:
         c = self.connection.cursor()
 
@@ -23,36 +23,7 @@ class Users(Connection):
 
         return True
 
-    def select(self) -> list | bool:
-        c = self.connection.cursor()
-
-        sql = 'SELECT * FROM contacts'
-
-        c.execute(sql)
-
-        raw_data = c.fetchall()
-
-        if not len(raw_data):
-            return False
-
-        data = list()
-
-        for v in raw_data:
-            data.append({
-                "id": v[0],
-                "first_name": v[1],
-                "last_name": v[2],
-                "birthday": v[3],
-                "company": v[4],
-                "workload": v[5],
-                "department": v[6],
-                "created_at": v[8],
-                "updated_at": v[9],
-            })
-
-        return data
-
-    def select_byu_user_id(self, id: int):
+    def select_by_user_id(self, id: int):
         c = self.connection.cursor()
 
         sql = f'SELECT * FROM contacts WHERE user_id = {id}'
