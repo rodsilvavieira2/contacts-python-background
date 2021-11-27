@@ -7,7 +7,7 @@ class Users(Connection):
     def insert(self, data: dict) -> bool:
         c = self.connection.cursor()
 
-        sql = 'INSERT INTO values(null, %s, %s, %s, %s, %s, %s, %s)'
+        sql = 'INSERT INTO users values(null, %s, %s, %s, %s, %s, %s, %s)'
 
         now = datetime.now()
 

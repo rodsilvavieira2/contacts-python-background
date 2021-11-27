@@ -27,7 +27,7 @@ class GetUserByIdRoute(Resource):
         return resp
 
 
-class DeleteUserRoute(Resource):
+class DeleteUserByIdRoute(Resource):
     def Delete(self, id: int):
 
         resp = DeleteUserByIdController.execute(id)
@@ -35,7 +35,7 @@ class DeleteUserRoute(Resource):
         return resp
 
 
-class UpdateUserRoute(Resource):
+class UpdateUserByIdRoute(Resource):
     def put(self, id):
         params = reqparse.RequestParser()
 
