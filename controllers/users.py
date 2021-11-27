@@ -11,12 +11,14 @@ class CreateUserController:
 
             email_attr = data['email']
 
-            isExistingEmail = users.select_by_email(email)
+            isExistingEmail = users.select_by_email(email_attr)
 
             if isExistingEmail:
                 return HttpResponses.bad_request(
                     f'This EMAIL ({email_attr}) already exits'
                 )
+
+            users.insert(data)
 
             return HttpResponses.created()
 
@@ -33,7 +35,7 @@ class GetUserByIdController:
 
             isExistingUser = users.select_by_id(id)
 
-            if isExistingEmail:
+            if not isExistingUser:
                 return HttpResponses.not_found(
                     f'User not found'
                 )
@@ -51,10 +53,10 @@ class DeleteUserByIdController:
         try:
             users = Users()
 
-            rep = users.delete(id)
+            resp = users.delete(id)
 
-            if isExistingEmail:
-                return rep.not_found(
+            if not resp:
+                return HttpResponses.not_found(
                     f'User not found'
                 )
 
@@ -71,10 +73,10 @@ class UpdateUserByIdController:
         try:
             users = Users()
 
-            rep = users.update(id, data)
+            resp = users.update(id, data)
 
-            if isExistingEmail:
-                return rep.not_found(
+            if resp:
+                return HttpResponses.not_found(
                     f'User not found'
                 )
 

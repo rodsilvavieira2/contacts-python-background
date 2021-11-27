@@ -17,7 +17,7 @@ class CreatePhoneRoute(Resource):
 
 
 class DeletePhoneByIdRoute(Resource):
-    def Delete(self, id: int):
+    def delete(self, id: int):
 
         resp = DeletePhoneByIdController.execute(id)
 

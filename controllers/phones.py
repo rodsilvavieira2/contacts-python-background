@@ -18,6 +18,8 @@ class CreatePhoneController:
                     f'This PHONE ({phone_attr}) already exits'
                 )
 
+            phones.insert(data)
+
             return HttpResponses.created()
 
         except Exception as e:

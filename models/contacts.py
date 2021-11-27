@@ -7,7 +7,8 @@ class Users(Connection):
     def insert(self, data: dict) -> bool:
         c = self.connection.cursor()
 
-        sql = 'INSERT INTO users values(null, %s, %s, %s, %s, %s, %s, %s)'
+        sql = 'INSERT INTO contacts' \
+            ' values(null, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
 
         now = datetime.now()
 
@@ -25,7 +26,7 @@ class Users(Connection):
     def select(self) -> list | bool:
         c = self.connection.cursor()
 
-        sql = 'SELECT * FORM users'
+        sql = 'SELECT * FROM contacts'
 
         c.execute(sql)
 
@@ -41,19 +42,20 @@ class Users(Connection):
                 "id": v[0],
                 "first_name": v[1],
                 "last_name": v[2],
-                "email": v[3],
-                "password": v[4],
-                "avatart_url": v[5],
-                "created_at": v[6],
-                "updated_at": v[7],
+                "birthday": v[3],
+                "company": v[4],
+                "workload": v[5],
+                "department": v[6],
+                "created_at": v[8],
+                "updated_at": v[9],
             })
 
         return data
 
-    def select_by_id(self, id: int):
+    def select_byu_user_id(self, id: int):
         c = self.connection.cursor()
 
-        sql = f'SELECT * FROM users WHERE id = {id}'
+        sql = f'SELECT * FROM contacts WHERE user_id = {id}'
 
         c.execute(sql)
 
@@ -63,39 +65,15 @@ class Users(Connection):
             return False
 
         return {
-            "id": raw_data[0],
-            "first_name": raw_data[1],
-            "last_name": raw_data[2],
-            "email": raw_data[3],
-            "password": raw_data[4],
-            "avatart_url": raw_data[5],
-            "created_at": raw_data[6],
-            "updated_at": raw_data[7],
-        }
-
-        return data
-
-    def select_by_email(self, email: str):
-        c = self.connection.cursor()
-
-        sql = f"SELECT * FROM users WHERE email = '{email}' "
-
-        c.execute(sql)
-
-        raw_data = c.fetchone()
-
-        if not raw_data:
-            return False
-
-        return {
-            "id": raw_data[0],
-            "first_name": raw_data[1],
-            "last_name": raw_data[2],
-            "email": raw_data[3],
-            "password": raw_data[4],
-            "avatart_url": raw_data[5],
-            "created_at": raw_data[6],
-            "updated_at": raw_data[7],
+            "id": v[0],
+            "first_name": v[1],
+            "last_name": v[2],
+            "birthday": v[3],
+            "company": v[4],
+            "workload": v[5],
+            "department": v[6],
+            "created_at": v[8],
+            "updated_at": v[9],
         }
 
         return data
@@ -105,7 +83,7 @@ class Users(Connection):
 
         str_data = parser_null_values(data)
 
-        sql = f"UPDATE users SET {str_data} WHERE id = {id}"
+        sql = f"UPDATE contacts SET {str_data} WHERE id = {id}"
 
         c.execute(sql)
         self.connection.commit()
@@ -118,7 +96,7 @@ class Users(Connection):
     def delete(self, id: int) -> bool:
         c = self.connection.cursor()
 
-        sql = f"DELETE FROM users WHERE id = {id}"
+        sql = f"DELETE FROM contacts WHERE id = {id}"
 
         c.execute(sql)
         self.connection.commit()

@@ -18,6 +18,8 @@ class CreateEmailController:
                     f'This EMAIL ({email_attr}) already exits'
                 )
 
+            emails.insert(data)
+
             return HttpResponses.created()
 
         except Exception as e:

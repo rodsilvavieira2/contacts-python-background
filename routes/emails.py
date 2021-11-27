@@ -17,7 +17,7 @@ class CreateEmailRoute(Resource):
 
 
 class DeleteEmailByIdRoute(Resource):
-    def Delete(self, id: int):
+    def delete(self, id: int):
 
         resp = DeleteEmailByIdController.execute(id)
 

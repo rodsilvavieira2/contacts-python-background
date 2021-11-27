@@ -28,7 +28,7 @@ class GetUserByIdRoute(Resource):
 
 
 class DeleteUserByIdRoute(Resource):
-    def Delete(self, id: int):
+    def delete(self, id: int):
 
         resp = DeleteUserByIdController.execute(id)
 
