@@ -7,7 +7,7 @@ class Phones(Connection):
     def insert(self, data: dict) -> bool:
         c = self.connection.cursor()
 
-        sql = 'INSERT INTO phones values(null, %s, %s, %s, %s)'
+        sql = 'INSERT INTO phones values(null, %s, %s, %s,%s, %s)'
 
         now = datetime.now()
 
@@ -25,7 +25,7 @@ class Phones(Connection):
     def select_by_phone(self, phone: str):
         c = self.connection.cursor()
 
-        sql = f"SELECT * FROM phones WHERE number = '{phone}'"
+        sql = f"SELECT * FROM phones WHERE phone = '{phone}'"
 
         c.execute(sql)
 
@@ -44,12 +44,10 @@ class Phones(Connection):
 
         return data
 
-    def update(self, id: int, data: dict) -> bool:
+    def update(self, id: int, phone: str) -> bool:
         c = self.connection.cursor()
 
-        str_data = parser_null_values(data)
-
-        sql = f"UPDATE phones SET {str_data} WHERE id = {id}"
+        sql = f"UPDATE phones SET phone  = '{phone}' WHERE id = {id}"
 
         c.execute(sql)
         self.connection.commit()

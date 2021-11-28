@@ -10,7 +10,7 @@ class CreateUserRoute(Resource):
         params.add_argument('last_name', type=str, required=True)
         params.add_argument('email', type=str, required=True)
         params.add_argument('password', type=str, required=True)
-        params.add_argument('avatart_url', type=str, required=False)
+        params.add_argument('avatar_url', type=str, required=False)
 
         args = params.parse_args()
 
@@ -43,7 +43,7 @@ class UpdateUserByIdRoute(Resource):
         params.add_argument('last_name', type=str, required=False)
         params.add_argument('email', type=str, required=False)
         params.add_argument('password', type=str, required=False)
-        params.add_argument('avatart_url', type=str, required=False)
+        params.add_argument('avatar_url', type=str, required=False)
 
         args = params.parse_args()
 

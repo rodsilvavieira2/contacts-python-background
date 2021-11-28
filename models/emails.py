@@ -44,12 +44,10 @@ class Emails(Connection):
 
         return data
 
-    def update(self, id: int, data: dict) -> bool:
+    def update(self, id: int, email: str) -> bool:
         c = self.connection.cursor()
 
-        str_data = parser_null_values(data)
-
-        sql = f"UPDATE emails SET {str_data} WHERE id = {id}"
+        sql = f"UPDATE emails SET email = '{email}' WHERE id = {id}"
 
         c.execute(sql)
         self.connection.commit()

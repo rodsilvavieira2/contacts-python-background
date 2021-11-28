@@ -20,13 +20,11 @@ api.add_resource(DeleteUserByIdRoute, '/users/<int:id>')
 
 # emails routes
 
-api.add_resource(CreateEmailRoute, '/emails')
 api.add_resource(UpdateEmailByIdRoute, '/emails/<int:id>')
 api.add_resource(DeleteEmailByIdRoute, '/emails/<int:id>')
 
 # phones routes
 
-api.add_resource(CreatePhoneRoute, '/phones')
 api.add_resource(UpdatePhoneByIdRoute, '/phones/<int:id>')
 api.add_resource(DeletePhoneByIdRoute, '/phones/<int:id>')
 

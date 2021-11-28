@@ -4,11 +4,11 @@ from datetime import datetime
 
 
 class Contacts(Connection):
-    def insert(self, data: dict) -> bool:
+    def insert(self, data: dict) -> bool | int:
         c = self.connection.cursor()
 
         sql = 'INSERT INTO contacts' \
-            ' values(null, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
+            ' values(null, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
 
         now = datetime.now()
 
@@ -21,7 +21,7 @@ class Contacts(Connection):
         if not c.rowcount:
             return False
 
-        return True
+        return c.lastrowid
 
     def select_by_user_id(self, id: int):
         c = self.connection.cursor()
@@ -45,13 +45,18 @@ class Contacts(Connection):
             result_emails = c.fetchall()
 
             c_emails = []
+
             for v in result_emails:
                 c_emails.append({
                     "id": v[0],
                     "email": v[1]
                 })
 
-            c.execute(f'SELECT * FROM phones WHERE contact_id = {c_id}')
+            sql_phone = 'SELECT * FROM phones as p' \
+                        ' JOIN phone_types as pt ON p.phone_type_id = pt.id' \
+                        f'  WHERE contact_id = {c_id}'
+
+            c.execute(sql_phone)
             result_phones = c.fetchall()
 
             c_phones = []
@@ -59,7 +64,8 @@ class Contacts(Connection):
             for v in result_phones:
                 c_phones.append({
                     "id": v[0],
-                    "phone": v[1]
+                    "phone": v[1],
+                    "type": v[3]
                 })
 
             phones.update({
@@ -89,6 +95,31 @@ class Contacts(Connection):
                 })
 
         return data
+
+    def select_contact_by_id(self, contact_id) -> dict | bool:
+        c = self.connection.cursor()
+
+        sql = f'SELECT * FROM contacts WHERE id = {contact_id}'
+
+        c.execute(sql)
+
+        raw_data = c.fetchone()
+
+        if not raw_data:
+            return False
+
+        return {
+            "id": raw_data[0],
+            "first_name": raw_data[1],
+            "last_name": raw_data[2],
+            "birthday": raw_data[3],
+            "company": raw_data[4],
+            "workload": raw_data[5],
+            "department": raw_data[6],
+            "user_id": raw_data[7],
+            "created_at": raw_data[8],
+            "updated_at": raw_data[9],
+        }
 
     def update(self, id: int, data: dict) -> bool:
         c = self.connection.cursor()

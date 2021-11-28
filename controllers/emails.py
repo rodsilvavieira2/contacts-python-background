@@ -1,29 +1,6 @@
 from models.emails import Emails
+from models.contacts import Contacts
 from helpers.http_responses import HttpResponses
-
-
-class CreateEmailController:
-
-    @staticmethod
-    def execute(data: dict):
-        try:
-            emails = Emails()
-
-            email_attr = data['email']
-
-            isExistingEmail = emails.select_by_email(email_attr)
-
-            if isExistingEmail:
-                return HttpResponses.bad_request(
-                    f'This EMAIL ({email_attr}) already exits'
-                )
-
-            emails.insert(data)
-
-            return HttpResponses.created()
-
-        except Exception as e:
-            return HttpResponses.server_error()
 
 
 class DeleteEmailByIdController:

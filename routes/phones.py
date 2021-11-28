@@ -8,6 +8,7 @@ class CreatePhoneRoute(Resource):
 
         params.add_argument('phone', type=str, required=True)
         params.add_argument('contact_id', type=int, required=True)
+        params.add_argument('phone_type_id', type=int, required=True)
 
         args = params.parse_args()
 

@@ -12,7 +12,12 @@ class CreateContactRoute(Resource):
         params.add_argument('company', type=str, required=False)
         params.add_argument('workload', type=str, required=False)
         params.add_argument('department', type=str, required=False)
+        params.add_argument('avatar_url', type=str, required=False)
         params.add_argument('user_id', type=str, required=True)
+        params.add_argument('emails', type=dict,
+                            required=False, action='append')
+        params.add_argument('phones', type=dict,
+                            required=True, action='append')
 
         args = params.parse_args()
 
@@ -47,6 +52,7 @@ class UpdateContactByIdRoute(Resource):
         params.add_argument('company', type=str, required=False)
         params.add_argument('workload', type=str, required=False)
         params.add_argument('department', type=str, required=False)
+        params.add_argument('avatar_url', type=str, required=False)
         params.add_argument('user_id', type=str, required=False)
 
         args = params.parse_args()

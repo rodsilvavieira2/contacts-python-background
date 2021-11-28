@@ -1,29 +1,7 @@
 from models.phones import Phones
+from models.contacts import Contacts
+from models.phone_type import PhoneType
 from helpers.http_responses import HttpResponses
-
-
-class CreatePhoneController:
-
-    @staticmethod
-    def execute(data: dict):
-        try:
-            phones = Phones()
-
-            phone_attr = data['phone']
-
-            isExistingPhone = phones.select_by_phone(phone_attr)
-
-            if isExistingPhone:
-                return HttpResponses.bad_request(
-                    f'This PHONE ({phone_attr}) already exits'
-                )
-
-            phones.insert(data)
-
-            return HttpResponses.created()
-
-        except Exception as e:
-            return HttpResponses.server_error()
 
 
 class DeletePhoneByIdController:
