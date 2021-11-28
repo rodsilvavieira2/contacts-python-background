@@ -19,7 +19,7 @@ class CreateContactController:
 
 class ListAllContactByUserIdController:
     @staticmethod
-    def execute(self, user_id: int):
+    def execute(user_id: int):
         try:
             contacts = Contacts()
 
@@ -28,7 +28,7 @@ class ListAllContactByUserIdController:
             if not resp:
                 return HttpResponses.not_found('No contacts for this user')
 
-            return HttpResponses.created()
+            return HttpResponses.ok(resp)
 
         except Exception as e:
             return HttpResponses.server_error()

@@ -5,6 +5,7 @@ from flask_cors import CORS
 from routes.users import *
 from routes.emails import *
 from routes.phones import *
+from routes.contacts import *
 
 app = Flask(__name__)
 
@@ -29,6 +30,12 @@ api.add_resource(CreatePhoneRoute, '/phones')
 api.add_resource(UpdatePhoneByIdRoute, '/phones/<int:id>')
 api.add_resource(DeletePhoneByIdRoute, '/phones/<int:id>')
 
+# Contacts routes
+
+api.add_resource(CreateContactRoute, '/contacts')
+api.add_resource(ListAllContactByUserIdRoute, '/contacts/<int:id>')
+api.add_resource(UpdateContactByIdRoute, '/contacts/<int:id>')
+api.add_resource(DeleteContactByIdRoute, '/contacts/<int:id>')
 
 if __name__ == "__main__":
     app.run(debug=True, port=3000)

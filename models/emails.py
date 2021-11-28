@@ -25,7 +25,7 @@ class Emails(Connection):
     def select_by_email(self, email: str):
         c = self.connection.cursor()
 
-        sql = f"SELECT * FORM emails WHERE email = '{email}'"
+        sql = f"SELECT * FROM emails WHERE email = '{email}'"
 
         c.execute(sql)
 

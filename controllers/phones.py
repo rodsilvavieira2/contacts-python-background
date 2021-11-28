@@ -11,9 +11,9 @@ class CreatePhoneController:
 
             phone_attr = data['phone']
 
-            isExistingEmail = phones.select_by_phone(phone_attr)
+            isExistingPhone = phones.select_by_phone(phone_attr)
 
-            if isExistingEmail:
+            if isExistingPhone:
                 return HttpResponses.bad_request(
                     f'This PHONE ({phone_attr}) already exits'
                 )

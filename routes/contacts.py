@@ -8,7 +8,6 @@ class CreateContactRoute(Resource):
 
         params.add_argument('first_name', type=str, required=True)
         params.add_argument('last_name', type=str, required=True)
-        params.add_argument('email', type=str, required=True)
         params.add_argument('birthday', type=str, required=False)
         params.add_argument('company', type=str, required=False)
         params.add_argument('workload', type=str, required=False)
@@ -25,7 +24,7 @@ class CreateContactRoute(Resource):
 class ListAllContactByUserIdRoute(Resource):
     def get(self, id: int):
 
-        resp = ListAllContactByUserIdController.execute(id)
+        resp = ListAllContactByUserIdController.execute(user_id=id)
 
         return resp
 
@@ -38,13 +37,12 @@ class DeleteContactByIdRoute(Resource):
         return resp
 
 
-class UpdateUserByIdRoute(Resource):
+class UpdateContactByIdRoute(Resource):
     def put(self, id):
         params = reqparse.RequestParser()
 
         params.add_argument('first_name', type=str, required=False)
         params.add_argument('last_name', type=str, required=False)
-        params.add_argument('email', type=str, required=False)
         params.add_argument('birthday', type=str, required=False)
         params.add_argument('company', type=str, required=False)
         params.add_argument('workload', type=str, required=False)

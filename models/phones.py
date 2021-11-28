@@ -25,7 +25,7 @@ class Phones(Connection):
     def select_by_phone(self, phone: str):
         c = self.connection.cursor()
 
-        sql = f"SELECT * FORM phones WHERE phone = '{phone}'"
+        sql = f"SELECT * FROM phones WHERE number = '{phone}'"
 
         c.execute(sql)
 

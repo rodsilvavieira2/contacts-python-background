@@ -30,22 +30,63 @@ class Contacts(Connection):
 
         c.execute(sql)
 
-        raw_data = c.fetchone()
+        raw_data = c.fetchall()
 
-        if not raw_data:
+        if not len(raw_data):
             return False
 
-        return {
-            "id": v[0],
-            "first_name": v[1],
-            "last_name": v[2],
-            "birthday": v[3],
-            "company": v[4],
-            "workload": v[5],
-            "department": v[6],
-            "created_at": v[8],
-            "updated_at": v[9],
-        }
+        emails = dict()
+        phones = dict()
+
+        for v in raw_data:
+            c_id = v[0]
+
+            c.execute(f'SELECT * FROM emails WHERE contact_id = {c_id}')
+            result_emails = c.fetchall()
+
+            c_emails = []
+            for v in result_emails:
+                c_emails.append({
+                    "id": v[0],
+                    "email": v[1]
+                })
+
+            c.execute(f'SELECT * FROM phones WHERE contact_id = {c_id}')
+            result_phones = c.fetchall()
+
+            c_phones = []
+
+            for v in result_phones:
+                c_phones.append({
+                    "id": v[0],
+                    "phone": v[1]
+                })
+
+            phones.update({
+                c_id: c_phones
+            })
+
+            emails.update({
+                c_id: c_emails
+            })
+
+        data = list()
+
+        for v in raw_data:
+            data.append(
+                {
+                    "id": v[0],
+                    "first_name": v[1],
+                    "last_name": v[2],
+                    "birthday": v[3],
+                    "company": v[4],
+                    "workload": v[5],
+                    "department": v[6],
+                    "emails": emails.get(v[0]),
+                    "phones": phones.get(v[0]),
+                    "created_at": v[8],
+                    "updated_at": v[9],
+                })
 
         return data
 
