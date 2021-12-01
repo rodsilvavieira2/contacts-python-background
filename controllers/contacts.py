@@ -22,47 +22,7 @@ class CreateContactController:
                     f'This user id ({user_id}) not exists.'
                 )
 
-            contacts = Contacts()
-
-            emails_attr = data.get('emails')
-            phones_attr = data.get('phones')
-
-            data.pop('emails')
-            data.pop('phones')
-
-            if emails_attr and len(emails_attr):
-                for v in emails_attr:
-                    email = v.get('email')
-                    isValid = email_validation(email)
-
-                    if not isValid:
-                        return HttpResponses.bad_request(
-                            f'The email:{email} is invalid'
-                        )
-
-            contact_id = contacts.insert(data)
-
-            if contact_id:
-                if emails_attr and len(emails_attr):
-                    for v in emails_attr:
-                        email = v.get('email')
-                        if email and contact_id:
-                            Emails().insert({
-                                "email": email,
-                                "contact_id": contact_id
-                            })
-
-                if phones_attr and len(phones_attr):
-                    for v in phones_attr:
-                        phone = v.get('phone')
-                        phone_type_id = v.get('type')
-
-                        if phone and contact_id and phone_type_id:
-                            Phones().insert({
-                                "phone": phone,
-                                "contact_id": contact_id,
-                                "phone_type_id": phone_type_id
-                            })
+            users.insert(data)
 
             return HttpResponses.created()
 
@@ -114,34 +74,12 @@ class UpdateContactByIdController:
         try:
             contacts = Contacts()
 
-            emails_attr = data.get('emails')
-            phones_attr = data.get('phones')
-
-            data.pop('emails')
-            data.pop('phones')
-
             resp = contacts.update(id, data)
 
-            if not resp:
+            if resp:
                 return HttpResponses.not_found(
-                    f'Contact not found'
+                    f'User not found'
                 )
-
-            if emails_attr:
-                for v in emails_attr:
-                    id = v.get('id')
-                    email = v.get('email')
-
-                    if id and email:
-                        Emails().update(id, email)
-
-            if phones_attr:
-                for v in phones_attr:
-                    id = v.get('id')
-                    phone = v.get('phone')
-
-                    if id and phone:
-                        Phones().update(id, phone)
 
             return HttpResponses.ok()
 

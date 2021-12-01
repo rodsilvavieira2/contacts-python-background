@@ -26,55 +26,12 @@ class Contacts(Connection):
     def select_by_user_id(self, id: int):
         c = self.connection.cursor()
 
-        sql = f'SELECT * FROM contacts WHERE user_id = {id}'
+        sql = f'SELECT * FROM contacts as c WHERE user_id = {id}'\
+            ' JOIN phone_types as pt ON pt.id = c.phone_type_id'
 
         c.execute(sql)
 
         raw_data = c.fetchall()
-
-        if not len(raw_data):
-            return False
-
-        emails = dict()
-        phones = dict()
-
-        for v in raw_data:
-            c_id = v[0]
-
-            c.execute(f'SELECT * FROM emails WHERE contact_id = {c_id}')
-            result_emails = c.fetchall()
-
-            c_emails = []
-
-            for v in result_emails:
-                c_emails.append({
-                    "id": v[0],
-                    "email": v[1]
-                })
-
-            sql_phone = 'SELECT * FROM phones as p' \
-                        ' JOIN phone_types as pt ON p.phone_type_id = pt.id' \
-                        f'  WHERE contact_id = {c_id}'
-
-            c.execute(sql_phone)
-            result_phones = c.fetchall()
-
-            c_phones = []
-
-            for v in result_phones:
-                c_phones.append({
-                    "id": v[0],
-                    "phone": v[1],
-                    "type": v[3]
-                })
-
-            phones.update({
-                c_id: c_phones
-            })
-
-            emails.update({
-                c_id: c_emails
-            })
 
         data = list()
 
@@ -84,14 +41,16 @@ class Contacts(Connection):
                     "id": v[0],
                     "first_name": v[1],
                     "last_name": v[2],
-                    "birthday": v[3],
-                    "company": v[4],
-                    "workload": v[5],
-                    "department": v[6],
-                    "emails": emails.get(v[0]),
-                    "phones": phones.get(v[0]),
-                    "created_at": v[8],
-                    "updated_at": v[9],
+                    "email": v[3],
+                    "phone": v[4],
+                    "phone_type": v[14],
+                    "birthday": v[6],
+                    "company": v[7],
+                    "workload": v[8],
+                    "department": v[9],
+                    "avatar_url": v[10],
+                    "created_at": v[11],
+                    "updated_at": v[12],
                 })
 
         return data
@@ -109,16 +68,19 @@ class Contacts(Connection):
             return False
 
         return {
-            "id": raw_data[0],
-            "first_name": raw_data[1],
-            "last_name": raw_data[2],
-            "birthday": raw_data[3],
-            "company": raw_data[4],
-            "workload": raw_data[5],
-            "department": raw_data[6],
-            "user_id": raw_data[7],
-            "created_at": raw_data[8],
-            "updated_at": raw_data[9],
+            "id": v[0],
+            "first_name": v[1],
+            "last_name": v[2],
+            "email": v[3],
+            "phone": v[4],
+            "phone_type": v[5],
+            "birthday": v[6],
+            "company": v[7],
+            "workload": v[8],
+            "department": v[9],
+            "avatar_url": v[10],
+            "created_at": v[11],
+            "updated_at": v[12],
         }
 
     def update(self, id: int, data: dict) -> bool:
