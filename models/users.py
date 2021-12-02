@@ -17,7 +17,7 @@ class Users(Connection):
         c.execute(sql, parse_dict_to_tuple(data))
         self.connection.commit()
 
-        if not c.rowcount:
+        if c.rowcount <= 0:
             return False
 
         return True
@@ -110,7 +110,7 @@ class Users(Connection):
         c.execute(sql)
         self.connection.commit()
 
-        if not c.rowcount:
+        if c.rowcount <= 0:
             return False
 
         return True
@@ -123,7 +123,7 @@ class Users(Connection):
         c.execute(sql)
         self.connection.commit()
 
-        if not c.rowcount:
+        if c.rowcount <= 0:
             return False
 
         return True

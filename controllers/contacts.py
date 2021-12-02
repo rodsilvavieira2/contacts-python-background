@@ -13,16 +13,16 @@ class CreateContactController:
 
             user_id = data['user_id']
 
-            isUserExisting = users.select_by_id(user_id)
+            resp = users.select_by_id(user_id)
 
-            if not isUserExisting:
+            if not resp:
                 return HttpResponses.bad_request(
                     f'This user id ({user_id}) not exists.'
                 )
 
             contacts = Contacts()
 
-            email = contacts['email']
+            email = data['email']
 
             if not email_validation(email):
                 return HttpResponses.bad_request('Invalid Address Email')

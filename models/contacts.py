@@ -18,7 +18,7 @@ class Contacts(Connection):
         c.execute(sql, parse_dict_to_tuple(data))
         self.connection.commit()
 
-        if not c.rowcount:
+        if c.rowcount <= 0:
             return False
 
         return True
@@ -26,12 +26,16 @@ class Contacts(Connection):
     def select_by_user_id(self, id: int):
         c = self.connection.cursor()
 
-        sql = f'SELECT * FROM contacts as c WHERE user_id = {id}'\
-            ' JOIN phone_types as pt ON pt.id = c.phone_type_id'
+        sql = f'SELECT * FROM contacts as c'\
+            ' JOIN phone_types as pt ON pt.id = c.phone_type_id' \
+            f" WHERE user_id = {id}"
 
         c.execute(sql)
 
         raw_data = c.fetchall()
+
+        if not len(raw_data):
+            return False
 
         data = list()
 
@@ -43,14 +47,14 @@ class Contacts(Connection):
                     "last_name": v[2],
                     "email": v[3],
                     "phone": v[4],
-                    "phone_type": v[14],
+                    "phone_type": v[15],
                     "birthday": v[6],
                     "company": v[7],
                     "workload": v[8],
                     "department": v[9],
                     "avatar_url": v[10],
-                    "created_at": v[11],
-                    "updated_at": v[12],
+                    "created_at": v[12],
+                    "updated_at": v[13],
                 })
 
         return data
@@ -93,7 +97,7 @@ class Contacts(Connection):
         c.execute(sql)
         self.connection.commit()
 
-        if not c.rowcount:
+        if c.rowcount <= 0:
             return False
 
         return True
@@ -106,7 +110,7 @@ class Contacts(Connection):
         c.execute(sql)
         self.connection.commit()
 
-        if not c.rowcount:
+        if c.rowcount <= 0:
             return False
 
         return True
