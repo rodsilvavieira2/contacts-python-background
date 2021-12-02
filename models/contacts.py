@@ -4,11 +4,11 @@ from datetime import datetime
 
 
 class Contacts(Connection):
-    def insert(self, data: dict) -> bool | int:
+    def insert(self, data: dict) -> bool:
         c = self.connection.cursor()
 
         sql = 'INSERT INTO contacts' \
-            ' values(null, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
+            ' values(null, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
 
         now = datetime.now()
 
@@ -21,7 +21,7 @@ class Contacts(Connection):
         if not c.rowcount:
             return False
 
-        return c.lastrowid
+        return True
 
     def select_by_user_id(self, id: int):
         c = self.connection.cursor()

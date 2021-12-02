@@ -33,14 +33,14 @@ class GetUserByIdController:
         try:
             users = Users()
 
-            isExistingUser = users.select_by_id(id)
+            resp = users.select_by_id(id)
 
-            if not isExistingUser:
+            if not resp:
                 return HttpResponses.not_found(
                     f'User not found'
                 )
 
-            return HttpResponses.ok(isExistingUser)
+            return HttpResponses.ok(resp)
 
         except Exception as e:
             return HttpResponses.server_error()

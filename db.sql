@@ -32,9 +32,5 @@ CREATE TABLE `phone_types` (
 );
 ALTER TABLE `contacts`
 ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-ALTER TABLE `emails`
-ADD FOREIGN KEY (`contact_id`) REFERENCES `contacts` (`id`) ON DELETE CASCADE;
-ALTER TABLE `phones`
-ADD FOREIGN KEY (`contact_id`) REFERENCES `contacts` (`id`) ON DELETE CASCADE;
-ALTER TABLE `phones`
+ALTER TABLE `contacts`
 ADD FOREIGN KEY (`phone_type_id`) REFERENCES `phone_types` (`id`);

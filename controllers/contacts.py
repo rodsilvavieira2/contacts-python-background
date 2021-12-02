@@ -1,7 +1,5 @@
 from models.contacts import Contacts
 from models.users import Users
-from models.emails import Emails
-from models.phones import Phones
 from validation.params import email_validation
 from helpers.http_responses import HttpResponses
 
@@ -22,7 +20,14 @@ class CreateContactController:
                     f'This user id ({user_id}) not exists.'
                 )
 
-            users.insert(data)
+            contacts = Contacts()
+
+            email = contacts['email']
+
+            if not email_validation(email):
+                return HttpResponses.bad_request('Invalid Address Email')
+
+            contacts.insert(data)
 
             return HttpResponses.created()
 
@@ -78,7 +83,7 @@ class UpdateContactByIdController:
 
             if resp:
                 return HttpResponses.not_found(
-                    f'User not found'
+                    f'COntact not found'
                 )
 
             return HttpResponses.ok()
