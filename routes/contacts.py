@@ -1,4 +1,5 @@
 from controllers.contacts import *
+from helpers.http_responses import HttpResponses
 from flask_restful import Resource, reqparse
 
 
@@ -26,9 +27,23 @@ class CreateContactRoute(Resource):
 
 
 class ListAllContactByUserIdRoute(Resource):
+    def get(self):
+
+        params = reqparse.RequestParser()
+
+        params.add_argument('user',  type=int, location='args')
+
+        args = params.parse_args()
+
+        resp = ListAllContactByUserIdController.execute(args)
+
+        return resp
+
+
+class ListContactByIdRoute(Resource):
     def get(self, id: int):
 
-        resp = ListAllContactByUserIdController.execute(user_id=id)
+        resp = ListContactByIdController.execute(id)
 
         return resp
 

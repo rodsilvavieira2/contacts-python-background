@@ -17,7 +17,7 @@ CREATE TABLE `contacts` (
   `phone_type_id` INT NOT NULL,
   `birthday` date,
   `company` varchar(255),
-  `workload` varchar(255),
+  `job` varchar(255),
   `department` varchar(255),
   `avatar_url` varchar(255),
   `user_id` int NOT NULL,

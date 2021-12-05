@@ -35,13 +35,46 @@ class CreateContactController:
             return HttpResponses.server_error()
 
 
+class ListContactByIdController:
+    @staticmethod
+    def execute(id: int):
+        try:
+            contact = Contacts()
+
+            resp = contact.select_contact_by_id(id)
+
+            if not resp:
+                return HttpResponses.not_found(
+                    f'contact not found for this user {id}'
+                )
+
+        except Exception as e:
+            return HttpResponses.server_error()
+
+
 class ListAllContactByUserIdController:
     @staticmethod
-    def execute(user_id: int):
+    def execute(args: dict):
         try:
             contacts = Contacts()
 
-            resp = contacts.select_by_user_id(user_id)
+            id = args.get('user')
+
+            if not id:
+                return HttpResponses.bad_request(
+                    'Missing (user) argument on the query string.'
+                )
+
+            users = Users()
+
+            isExistingUser = users.select_by_id(id)
+
+            if not isExistingUser:
+                return HttpResponses.not_found(
+                    f"User not found  by the id ({id})"
+                )
+
+            resp = contacts.select_by_user_id(id)
 
             if not resp:
                 return HttpResponses.not_found('No contacts for this user')

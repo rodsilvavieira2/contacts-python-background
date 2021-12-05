@@ -8,6 +8,8 @@ from routes.contacts import *
 app = Flask(__name__)
 
 api = Api(app)
+CORS(app)
+
 
 # users routes
 
@@ -20,9 +22,10 @@ api.add_resource(DeleteUserByIdRoute, '/users/<int:id>')
 # Contacts routes
 
 api.add_resource(CreateContactRoute, '/contacts')
-api.add_resource(ListAllContactByUserIdRoute, '/contacts/<int:id>')
+api.add_resource(ListAllContactByUserIdRoute, '/contacts')
 api.add_resource(UpdateContactByIdRoute, '/contacts/<int:id>')
 api.add_resource(DeleteContactByIdRoute, '/contacts/<int:id>')
+api.add_resource(ListContactByIdRoute, '/contacts/<int:id>')
 
 if __name__ == "__main__":
-    app.run(debug=True, port=3000)
+    app.run(debug=True, port=8080)
