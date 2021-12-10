@@ -37,7 +37,7 @@ for index in range(1, 71):
         "first_name": faker.first_name(),
         "last_name": faker.last_name(),
         "email": faker.email(),
-        "phone": faker.phone_number(),
+        "phone_number": faker.phone_number(),
         "birthday": faker.date(),
         "company": faker.company(),
         "job": faker.job(),
@@ -62,7 +62,7 @@ for v in phone_types:
     c.commit()
 
 sql_contacts = "INSERT INTO contacts" \
-    "(`first_name`, `last_name`, `email`, `phone`, `birthday`, `company`," \
+    "(`first_name`, `last_name`, `email`, `phone_number`, `birthday`, `company`," \
     " `job`, `department`,`avatar_url`, `user_id`, `phone_type_id`)" \
     " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 

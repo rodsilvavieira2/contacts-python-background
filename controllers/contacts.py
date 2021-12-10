@@ -24,8 +24,9 @@ class CreateContactController:
 
             email = data['email']
 
-            if not email_validation(email):
-                return HttpResponses.bad_request('Invalid Address Email')
+            if email:
+                if not email_validation(email):
+                    return HttpResponses.bad_request('Invalid Address Email')
 
             contacts.insert(data)
 
@@ -77,7 +78,7 @@ class ListAllContactByUserIdController:
             resp = contacts.select_by_user_id(id)
 
             if not resp:
-                return HttpResponses.not_found('No contacts for this user')
+                return HttpResponses.no_content()
 
             return HttpResponses.ok(resp)
 
@@ -96,7 +97,7 @@ class DeleteContactByIdController:
 
             if not resp:
                 return HttpResponses.not_found(
-                    f'Contact not found'
+                    f'Error on delete contact'
                 )
 
             return HttpResponses.no_content()
@@ -114,9 +115,9 @@ class UpdateContactByIdController:
 
             resp = contacts.update(id, data)
 
-            if resp:
+            if not resp:
                 return HttpResponses.not_found(
-                    f'COntact not found'
+                    f'Error on update contact'
                 )
 
             return HttpResponses.ok()

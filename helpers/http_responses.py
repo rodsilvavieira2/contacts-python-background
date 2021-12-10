@@ -6,6 +6,7 @@ NOT_FOUND = 404
 BAD_REQUEST = 400
 SERVER_ERROR = 500
 NO_CONTENT = 204
+UNAUTHORIZED = 401
 
 
 class HttpResponses:
@@ -39,6 +40,18 @@ class HttpResponses:
             resp.update({"message": message})
 
         return resp, NOT_FOUND
+
+    @staticmethod
+    def unauthorized(message: str = ''):
+        resp = {
+            'message': 'unauthorized action',
+            "success": False
+        }
+
+        if message:
+            resp.update({'message': message})
+
+        return resp, UNAUTHORIZED
 
     @staticmethod
     def bad_request(message: str = ''):

@@ -1,19 +1,15 @@
 from services.connection import Connection
 from helpers.parser_data import parse_dict_to_tuple, parser_null_values
-from datetime import datetime
 
 
 class Contacts(Connection):
     def insert(self, data: dict) -> bool:
         c = self.connection.cursor()
 
-        sql = 'INSERT INTO contacts' \
-            ' values(null, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
-
-        now = datetime.now()
-
-        data.update({'create_at': now})
-        data.update({'update_at': now})
+        sql = "INSERT INTO contacts (`first_name`, `last_name`, `email`," \
+            " `phone_number`, `phone_type_id`, `birthday`, `company`," \
+            " `job`, `department`,`avatar_url`, `user_id`)" \
+            " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
         c.execute(sql, parse_dict_to_tuple(data))
         self.connection.commit()
@@ -45,16 +41,18 @@ class Contacts(Connection):
                     "id": v[0],
                     "first_name": v[1],
                     "last_name": v[2],
-                    "email": v[3],
-                    "phone_number": v[4],
+                    "phone_number": v[3],
+                    "email": v[4],
                     "phone_type": v[15],
                     "birthday": v[6],
                     "company": v[7],
-                    "workload": v[8],
+                    "job": v[8],
                     "department": v[9],
                     "avatar_url": v[10],
-                    "created_at": v[12],
-                    "updated_at": v[13],
+                    "is_favorite": v[12],
+                    "is_onTrash": v[13],
+                    "created_at": v[14],
+                    "updated_at": v[15],
                 })
 
         return data
@@ -75,16 +73,18 @@ class Contacts(Connection):
             "id": v[0],
             "first_name": v[1],
             "last_name": v[2],
-            "email": v[3],
-            "phone_number": v[4],
-            "phone_type": v[5],
+            "phone_number": v[3],
+            "email": v[4],
+            "phone_type": v[15],
             "birthday": v[6],
             "company": v[7],
-            "workload": v[8],
+            "job": v[8],
             "department": v[9],
             "avatar_url": v[10],
-            "created_at": v[11],
-            "updated_at": v[12],
+            "is_favorite": bool(v[12]),
+            "is_onTrash": bool(v[13]),
+            "created_at": v[14],
+            "updated_at": v[15],
         }
 
     def update(self, id: int, data: dict) -> bool:

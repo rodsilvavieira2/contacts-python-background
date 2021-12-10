@@ -1,9 +1,12 @@
 from flask import Flask
 from flask_restful import Api
 from flask_cors import CORS
+from dotenv import load_dotenv
 
 from routes.users import *
 from routes.contacts import *
+
+load_dotenv()
 
 app = Flask(__name__)
 
@@ -28,4 +31,4 @@ api.add_resource(DeleteContactByIdRoute, '/contacts/<int:id>')
 api.add_resource(ListContactByIdRoute, '/contacts/<int:id>')
 
 if __name__ == "__main__":
-    app.run(debug=True, port=8080)
+    app.run(debug=True, port=5000)
