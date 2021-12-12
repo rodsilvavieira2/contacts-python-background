@@ -17,7 +17,7 @@ class UserTokens(Connection):
 
         return True
 
-    def select_by_token(self, token: str, id: int) -> dict | bool:
+    def select_by_token_and_id(self, token: str, id: int) -> dict | bool:
         c = self.connection.cursor()
 
         sql = f"SELECT * FROM user_tokens WHERE token = '{token}'"\

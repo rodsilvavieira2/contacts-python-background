@@ -17,9 +17,11 @@ CORS(app)
 # users routes
 
 api.add_resource(CreateUserRoute, '/users')
-api.add_resource(GetUserByIdRoute, '/users/<int:id>')
-api.add_resource(UpdateUserByIdRoute, '/users/<int:id>')
-api.add_resource(DeleteUserByIdRoute, '/users/<int:id>')
+api.add_resource(GetUserInfoRoute, '/users')
+api.add_resource(UpdateUserByIdRoute, '/users')
+api.add_resource(DeleteUserByIdRoute, '/users')
+api.add_resource(LoginUserRoute, '/login')
+api.add_resource(RefreshTokenRoute, '/refresh_token')
 
 
 # Contacts routes

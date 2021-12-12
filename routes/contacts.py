@@ -1,10 +1,12 @@
 from controllers.contacts import *
 from helpers.http_responses import HttpResponses
+from validation.token_required import token_required
 from flask_restful import Resource, reqparse
 
 
 class CreateContactRoute(Resource):
-    def post(self):
+    @token_required
+    def post(self, current_user: dict):
         params = reqparse.RequestParser()
 
         params.add_argument('first_name', type=str, required=True)
@@ -17,9 +19,12 @@ class CreateContactRoute(Resource):
         params.add_argument('job', type=str, required=False)
         params.add_argument('department', type=str, required=False)
         params.add_argument('avatar_url', type=str, required=False)
-        params.add_argument('user_id', type=int, required=True)
 
         args = params.parse_args()
+
+        id = current_user['id']
+
+        args.update({'user_id': id})
 
         resp = CreateContactController.execute(args)
 
@@ -27,20 +32,18 @@ class CreateContactRoute(Resource):
 
 
 class ListAllContactByUserIdRoute(Resource):
-    def get(self):
+    @token_required
+    def get(self, current_user: dict):
 
-        params = reqparse.RequestParser()
+        id = current_user['id']
 
-        params.add_argument('user',  type=int, location='args')
-
-        args = params.parse_args()
-
-        resp = ListAllContactByUserIdController.execute(args)
+        resp = ListAllContactByUserIdController.execute(id)
 
         return resp
 
 
 class ListContactByIdRoute(Resource):
+    @token_required
     def get(self, id: int):
 
         resp = ListContactByIdController.execute(id)
@@ -49,6 +52,7 @@ class ListContactByIdRoute(Resource):
 
 
 class DeleteContactByIdRoute(Resource):
+    @token_required
     def delete(self, id: int):
 
         resp = DeleteContactByIdController.execute(id)
@@ -57,6 +61,7 @@ class DeleteContactByIdRoute(Resource):
 
 
 class UpdateContactByIdRoute(Resource):
+    @token_required
     def put(self, id):
         params = reqparse.RequestParser()
 

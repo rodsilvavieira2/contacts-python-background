@@ -1,7 +1,8 @@
 from models.users import Users
+from models.user_tokens import UserTokens
 from helpers.http_responses import HttpResponses
 from bcrypt import hashpw, gensalt, checkpw
-from jwt import encode
+from jwt import encode, decode, InvalidIssuerError
 from datetime import datetime, timedelta
 from os import getenv
 
@@ -22,7 +23,11 @@ class CreateUserController:
                     f'This EMAIL ({email_attr}) already exits'
                 )
 
-            data.update({'password': hashpw(data['password'], gensalt())})
+            passsword = data.get('password')
+
+            hashed_password = hashpw(passsword.encode(), gensalt())
+
+            data.update({'password': hashed_password})
 
             users.insert(data)
 
@@ -49,9 +54,9 @@ class LoginUserController:
                 )
 
             password = data.get('password')
-            hashed_password = current_user.get('passsword')
+            hashed_password = current_user.get('password')
 
-            isValid = checkpw(password, hashed_password)
+            isValid = checkpw(password.encode(), hashed_password.encode())
 
             if not isValid:
                 return HttpResponses.unauthorized('Invalid passsword')
@@ -65,6 +70,8 @@ class LoginUserController:
                 getenv('JWT_KEY').encode('utf-8')
             )
 
+            userTokens = UserTokens()
+
             refresh_token = encode(
                 {
                     'uid': current_user['id'],
@@ -73,6 +80,66 @@ class LoginUserController:
                 },
                 getenv('JWT_KEY').encode('utf-8')
             )
+
+            userTokens.insert(
+                {'token': refresh_token, 'user_id': current_user['id']}
+            )
+
+            return HttpResponses.ok({
+                'access_token': access_token,
+                'refresh_token': refresh_token
+            })
+
+        except Exception as e:
+            return HttpResponses.server_error()
+
+
+class RefreshTookenController:
+
+    @staticmethod
+    def execute(token: str):
+        try:
+            payload = decode(token)
+
+            userTokens = UserTokens()
+
+            refresh_token = userTokens.select_by_token_and_id(
+                token, payload['uid']
+            )
+
+            if not refresh_token:
+                raise HttpResponses.unauthorized('invalid refresh token')
+
+            userTokens.delete(refresh_token['id'])
+
+            access_token = encode(
+                {
+                    'uid': current_user['id'],
+                    'exp': datetime.utcnow() + timedelta(minutes=15),
+                    'iat': datetime.utcnow()
+                },
+                getenv('JWT_KEY').encode('utf-8')
+            )
+
+            userTokens = UserTokens()
+
+            refresh_token = encode(
+                {
+                    'uid': current_user['id'],
+                    'exp': datetime.utcnow() + timedelta(days=30),
+                    'iat': datetime.utcnow()
+                },
+                getenv('JWT_KEY').encode('utf-8')
+            )
+
+            userTokens.insert(
+                {'token': refresh_token, 'user_id': current_user['id']}
+            )
+
+            return HttpResponses.ok({
+                'access_token': access_token,
+                'refresh_token': refresh_token
+            })
 
         except Exception as e:
             return HttpResponses.server_error()
