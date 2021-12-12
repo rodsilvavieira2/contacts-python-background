@@ -20,27 +20,6 @@ class CreateUserRoute(Resource):
         return resp
 
 
-class LoginUserRoute(Resource):
-    def post(self):
-        params = reqparse.RequestParser()
-
-        params.add_argument('password', type=str, required=True)
-        params.add_argument('email', type=str, required=True)
-
-        args = params.parse_args()
-
-        resp = LoginUserController.execute(args)
-
-        return resp
-
-
-class RefreshTokenRoute(Resource):
-    def post(self, token: str):
-        resp = RefreshTookenController.execute(token)
-
-        return resp
-
-
 class GetUserInfoRoute(Resource):
     @token_required
     def get(self, current_user: dict):

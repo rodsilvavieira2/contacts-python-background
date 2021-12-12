@@ -51,7 +51,7 @@ class LoginController:
                 'refresh_token': refresh_token,
                 'user': {
                     'first_name': user['first_name'],
-                    'lastName': user['last_name'],
+                    'last_name': user['last_name'],
                     'email': user['email'],
                     'avatar_url': user['avatart_url']
                 }
@@ -61,7 +61,7 @@ class LoginController:
             HttpResponses.server_error()
 
 
-class RefreshToken:
+class RefreshTokenController:
     @staticmethod
     def execute(toke: str):
         try:
