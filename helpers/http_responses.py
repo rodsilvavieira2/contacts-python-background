@@ -75,6 +75,14 @@ class HttpResponses:
         return resp, BAD_REQUEST
 
     @staticmethod
+    def email_already_exists(email: str):
+        return {
+            'message': f'this email ({email} already exists)',
+            'code': 'email.exists',
+            'success': False
+        }, BAD_REQUEST
+
+    @staticmethod
     def invalid_credentials():
         return {
             "message": 'passsword or email incorrect',
@@ -108,7 +116,7 @@ class HttpResponses:
             "message": "invalid token",
             "code": "token.invalid",
             "success": False
-        }
+        }, UNAUTHORIZED
 
     @staticmethod
     def forbidden(message: str = ''):

@@ -12,16 +12,14 @@ class CreateUserController:
     @staticmethod
     def execute(data: dict):
         try:
-            users = Users()
-
             email_attr = data['email']
+
+            users = Users()
 
             isExistingEmail = users.select_by_email(email_attr)
 
             if isExistingEmail:
-                return HttpResponses.bad_request(
-                    f'This EMAIL ({email_attr}) already exits'
-                )
+                return HttpResponses.email_already_exists(email_attr)
 
             passsword = data.get('password')
 
@@ -60,57 +58,6 @@ class LoginUserController:
 
             if not isValid:
                 return HttpResponses.unauthorized('Invalid passsword')
-
-            access_token = encode(
-                {
-                    'uid': current_user['id'],
-                    'exp': datetime.utcnow() + timedelta(minutes=15),
-                    'iat': datetime.utcnow()
-                },
-                getenv('JWT_KEY').encode('utf-8')
-            )
-
-            userTokens = UserTokens()
-
-            refresh_token = encode(
-                {
-                    'uid': current_user['id'],
-                    'exp': datetime.utcnow() + timedelta(days=30),
-                    'iat': datetime.utcnow()
-                },
-                getenv('JWT_KEY').encode('utf-8')
-            )
-
-            userTokens.insert(
-                {'token': refresh_token, 'user_id': current_user['id']}
-            )
-
-            return HttpResponses.ok({
-                'access_token': access_token,
-                'refresh_token': refresh_token
-            })
-
-        except Exception as e:
-            return HttpResponses.server_error()
-
-
-class RefreshTookenController:
-
-    @staticmethod
-    def execute(token: str):
-        try:
-            payload = decode(token)
-
-            userTokens = UserTokens()
-
-            refresh_token = userTokens.select_by_token_and_id(
-                token, payload['uid']
-            )
-
-            if not refresh_token:
-                raise HttpResponses.unauthorized('invalid refresh token')
-
-            userTokens.delete(refresh_token['id'])
 
             access_token = encode(
                 {

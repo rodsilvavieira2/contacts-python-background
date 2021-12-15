@@ -44,7 +44,7 @@ class ListAllContactByUserIdRoute(Resource):
 
 class ListContactByIdRoute(Resource):
     @token_required
-    def get(self, id: int):
+    def get(self, id: int, current_user):
 
         resp = ListContactByIdController.execute(id)
 
@@ -53,7 +53,7 @@ class ListContactByIdRoute(Resource):
 
 class DeleteContactByIdRoute(Resource):
     @token_required
-    def delete(self, id: int):
+    def delete(self, id: int, current_user):
 
         resp = DeleteContactByIdController.execute(id)
 
@@ -62,7 +62,7 @@ class DeleteContactByIdRoute(Resource):
 
 class UpdateContactByIdRoute(Resource):
     @token_required
-    def put(self, id):
+    def put(self, id, current_user):
         params = reqparse.RequestParser()
 
         params.add_argument('first_name', type=str, required=False)

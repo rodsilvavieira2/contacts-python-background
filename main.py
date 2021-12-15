@@ -1,28 +1,26 @@
 from flask import Flask
 from flask_restful import Api
 from flask_cors import CORS
-from dotenv import load_dotenv
 
 from routes.users import *
 from routes.contacts import *
-
-load_dotenv()
+from routes.authentication import *
 
 app = Flask(__name__)
 
 api = Api(app)
 CORS(app)
 
+# authentication routes
+api.add_resource(LoginRoute, '/session')
+api.add_resource(RefreshTokenRoute, '/refresh_token')
 
 # users routes
 
 api.add_resource(CreateUserRoute, '/users')
-api.add_resource(GetUserInfoRoute, '/users')
+api.add_resource(GetUserInfoRoute, '/me')
 api.add_resource(UpdateUserByIdRoute, '/users')
 api.add_resource(DeleteUserByIdRoute, '/users')
-api.add_resource(LoginUserRoute, '/login')
-api.add_resource(RefreshTokenRoute, '/refresh_token')
-
 
 # Contacts routes
 

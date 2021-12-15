@@ -43,7 +43,7 @@ class DeleteUserByIdRoute(Resource):
 
 class UpdateUserByIdRoute(Resource):
     @token_required
-    def put(self, current_user: dic):
+    def put(self, current_user: dict):
         params = reqparse.RequestParser()
 
         params.add_argument('first_name', type=str, required=False)

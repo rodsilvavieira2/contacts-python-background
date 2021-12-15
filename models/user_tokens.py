@@ -21,7 +21,7 @@ class UserTokens(Connection):
         c = self.connection.cursor()
 
         sql = f"SELECT * FROM user_tokens WHERE token = '{token}'"\
-            f" AND id = {id}"
+            f" AND user_id = {id}"
 
         c.execute(sql)
 

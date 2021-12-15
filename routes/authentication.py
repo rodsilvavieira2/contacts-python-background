@@ -24,11 +24,11 @@ class RefreshTokenRoute(Resource):
 
         params = reqparse.RequestParser()
 
-        params.add_argument('access_token', type=str, required=True)
+        params.add_argument('refresh_token', type=str, required=True)
 
         args = params.parse_args()
 
-        token = args['access_token']
+        token = args['refresh_token']
 
         resp = RefreshTokenController.execute(token)
 

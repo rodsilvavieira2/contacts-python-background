@@ -1,10 +1,11 @@
 from models.users import Users
 from models.user_tokens import UserTokens
-
+from config.auth import auth
 from helpers.http_responses import HttpResponses
 
 from bcrypt import checkpw
-from jwt import encode, decode, DecodeError, ExpiredSignature
+import jwt
+from datetime import datetime, timedelta
 
 
 class LoginController:
@@ -14,92 +15,99 @@ class LoginController:
             email = data.get('email')
             password = data.get('password')
 
-            user = Users().select_by_email(email)
+            users = Users()
+
+            user = users.select_by_email(email)
 
             if not user:
-                HttpResponses.invalid_credentials()
+                return HttpResponses.invalid_credentials()
 
             hashed_password = user['password']
 
-            if not checkpw(password.encode(), hashed_password.encode()):
-                HttpResponses.invalid_credentials()
+            isValid = checkpw(password.encode(), hashed_password.encode())
 
-            access_token = encode(
+            if not isValid:
+                return HttpResponses.invalid_credentials()
+
+            access_token = jwt.encode(
                 {
-                    'uid': current_user['id'],
-                    'exp': datetime.utcnow() + timedelta(minutes=15),
+                    'sub': user['id'],
+                    'exp': datetime.utcnow() + timedelta(seconds=30),
                     'iat': datetime.utcnow()
                 },
-                getenv('JWT_KEY').encode('utf-8')
+                auth['jwt_key']
             )
 
-            refresh_token = encode(
+            refresh_token = jwt.encode(
                 {
-                    'uid': current_user['id'],
-                    'exp': datetime.utcnow() + timedelta(days=30),
+                    'sub': user['id'],
+                    'exp': datetime.utcnow() + timedelta(
+                        days=30
+                    ),
                     'iat': datetime.utcnow()
                 },
-                getenv('JWT_KEY').encode('utf-8')
+                auth['jwt_key']
             )
 
-            UserTokens().insert(
-                {'token': refresh_token, 'user_id': current_user['id']}
+            userTokens = UserTokens()
+
+            userTokens.insert(
+                {'token': refresh_token, 'user_id': user['id']}
             )
 
             return HttpResponses.ok({
                 'access_token': access_token,
                 'refresh_token': refresh_token,
-                'user': {
-                    'first_name': user['first_name'],
-                    'last_name': user['last_name'],
-                    'email': user['email'],
-                    'avatar_url': user['avatart_url']
-                }
+                'first_name': user['first_name'],
+                'last_name': user['last_name'],
+                'email': user['email'],
+                'avatar_url': user['avatart_url']
             })
 
         except Exception as e:
-            HttpResponses.server_error()
+            return HttpResponses.server_error()
 
 
 class RefreshTokenController:
     @staticmethod
-    def execute(toke: str):
+    def execute(token: str):
         try:
-            payload = decode(token)
+            key = auth['jwt_key']
+            payload = jwt.decode(token, key, algorithms=["HS256"])
 
             userTokens = UserTokens()
 
-            refresh_token = userTokens.select_by_token_and_id(
-                token, payload['uid']
+            current_refresh_token = userTokens.select_by_token_and_id(
+                token, payload['sub']
             )
 
-            if not refresh_token:
-                raise HttpResponses.unauthorized('invalid refresh token')
+            if not current_refresh_token:
+                return HttpResponses.token_invalid()
 
-            userTokens.delete(refresh_token['id'])
+            userTokens.delete(current_refresh_token['id'])
 
-            access_token = encode(
+            access_token = jwt.encode(
                 {
-                    'uid': current_user['id'],
-                    'exp': datetime.utcnow() + timedelta(minutes=15),
+                    'sub': payload['sub'],
+                    'exp': datetime.utcnow() + timedelta(seconds=30),
                     'iat': datetime.utcnow()
                 },
-                getenv('JWT_KEY').encode('utf-8')
+                auth['jwt_key']
             )
 
-            userTokens = UserTokens()
-
-            refresh_token = encode(
+            refresh_token = jwt.encode(
                 {
-                    'uid': current_user['id'],
-                    'exp': datetime.utcnow() + timedelta(days=30),
+                    'sub': payload['sub'],
+                    'exp': datetime.utcnow() + timedelta(
+                        days=auth['refresh_token_experie']
+                    ),
                     'iat': datetime.utcnow()
                 },
-                getenv('JWT_KEY').encode('utf-8')
+                auth['jwt_key']
             )
 
             userTokens.insert(
-                {'token': refresh_token, 'user_id': current_user['id']}
+                {'token': refresh_token, 'user_id': payload['sub']}
             )
 
             return HttpResponses.ok({
@@ -107,10 +115,10 @@ class RefreshTokenController:
                 'refresh_token': refresh_token
             })
 
-        except ExpiredSignature as e:
+        except jwt.ExpiredSignatureError as e:
             return HttpResponses.token_expired()
 
-        except DecodeError as e:
+        except jwt.DecodeError as e:
             return HttpResponses.token_invalid()
 
         except Exception as e:

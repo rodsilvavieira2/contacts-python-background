@@ -9,9 +9,9 @@ class CreateContactController:
     @staticmethod
     def execute(data: dict):
         try:
-            users = Users()
-
             user_id = data['user_id']
+
+            users = Users()
 
             resp = users.select_by_id(user_id)
 
@@ -20,13 +20,13 @@ class CreateContactController:
                     f'This user id ({user_id}) not exists.'
                 )
 
-            contacts = Contacts()
-
             email = data['email']
 
             if email:
                 if not email_validation(email):
                     return HttpResponses.bad_request('Invalid Address Email')
+
+            contacts = Contacts()
 
             contacts.insert(data)
 
@@ -40,9 +40,9 @@ class ListContactByIdController:
     @staticmethod
     def execute(id: int):
         try:
-            contact = Contacts()
+            contacts = Contacts()
 
-            resp = contact.select_contact_by_id(id)
+            resp = contacts.select_contact_by_id(id)
 
             if not resp:
                 return HttpResponses.not_found(

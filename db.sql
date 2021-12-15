@@ -40,8 +40,8 @@ CREATE TABLE `user_tokens` (
   `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 ALTER TABLE `contacts`
-ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 ALTER TABLE `contacts`
 ADD FOREIGN KEY (`phone_type_id`) REFERENCES `phone_types` (`id`);
-ATYLE TABLE `user_tokens`
-ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+ALTER TABLE `user_tokens`
+ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;

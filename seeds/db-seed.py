@@ -43,7 +43,7 @@ for index in range(1, 71):
         "job": faker.job(),
         "department": faker.bs(),
         "avatar_url": faker.image_url(),
-        "user_id":  2,
+        "user_id":  1,
         "phone_type_id": faker.randomize_nb_elements(min=1, max=3)
     })
 
