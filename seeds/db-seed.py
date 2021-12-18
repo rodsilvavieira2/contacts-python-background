@@ -32,7 +32,7 @@ user = {
 }
 
 
-for index in range(1, 71):
+for index in range(1, 101):
     contacts.append({
         "first_name": faker.first_name(),
         "last_name": faker.last_name(),
@@ -43,7 +43,7 @@ for index in range(1, 71):
         "job": faker.job(),
         "department": faker.bs(),
         "avatar_url": faker.image_url(),
-        "user_id":  1,
+        "user_id":  7,
         "phone_type_id": faker.randomize_nb_elements(min=1, max=3)
     })
 
