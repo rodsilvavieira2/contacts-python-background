@@ -25,14 +25,14 @@ phone_types = [
 ]
 
 user = {
-    "first_name": faker.first_name(),
-    "last_name": faker.last_name(),
-    "email": faker.email(),
-    "password": faker.password(length=12)
+    "first_name": 'rodrigo',
+    "last_name": 'silva',
+    "email": 'rodsilvavieira@gmail.com',
+    "password": '123456'
 }
 
 
-for index in range(1, 101):
+for index in range(1, 1000):
     contacts.append({
         "first_name": faker.first_name(),
         "last_name": faker.last_name(),
@@ -43,7 +43,7 @@ for index in range(1, 101):
         "job": faker.job(),
         "department": faker.bs(),
         "avatar_url": faker.image_url(),
-        "user_id":  7,
+        "user_id":  2,
         "phone_type_id": faker.randomize_nb_elements(min=1, max=3)
     })
 

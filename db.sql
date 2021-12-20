@@ -23,6 +23,7 @@ CREATE TABLE `contacts` (
   `user_id` int NOT NULL,
   `is_favorite` BOOLEAN NOT NULL DEFAULT FALSE,
   `is_onTrash` BOOLEAN NOT NULL DEFAULT FALSE,
+  `deleted_at` timestamp,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );

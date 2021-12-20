@@ -1,7 +1,7 @@
 from controllers.contacts import *
-from helpers.http_responses import HttpResponses
 from validation.token_required import token_required
 from flask_restful import Resource, reqparse
+from datetime import datetime
 
 
 class CreateContactRoute(Resource):
@@ -74,6 +74,7 @@ class UpdateContactByIdRoute(Resource):
         params.add_argument('company', type=str, required=False)
         params.add_argument('job', type=str, required=False)
         params.add_argument('department', type=str, required=False)
+        params.add_argument('deleted_at', type=str, required=False)
         params.add_argument('is_favorite', type=int, required=False)
         params.add_argument('is_onTrash', type=int, required=False)
         params.add_argument('avatar_url', type=str, required=False)

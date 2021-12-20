@@ -31,5 +31,6 @@ class RefreshTokenRoute(Resource):
         token = args['refresh_token']
 
         resp = RefreshTokenController.execute(token)
+        print(resp)
 
         return resp

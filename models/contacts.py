@@ -49,10 +49,11 @@ class Contacts(Connection):
                     "job": v[8],
                     "department": v[9],
                     "avatar_url": v[10],
-                    "is_favorite": v[12],
-                    "is_onTrash": v[13],
-                    "created_at": v[14],
-                    "updated_at": v[15],
+                    "is_favorite": bool(v[12]),
+                    "is_onTrash": bool(v[13]),
+                    "deleted_at": v[14],
+                    "created_at": v[15],
+                    "updated_at": v[16],
                 })
 
         return data
@@ -70,21 +71,22 @@ class Contacts(Connection):
             return False
 
         return {
-            "id": v[0],
-            "first_name": v[1],
-            "last_name": v[2],
-            "phone_number": v[3],
-            "email": v[4],
-            "phone_type_id": v[5],
-            "birthday": v[6],
-            "company": v[7],
-            "job": v[8],
-            "department": v[9],
-            "avatar_url": v[10],
-            "is_favorite": bool(v[12]),
-            "is_onTrash": bool(v[13]),
-            "created_at": v[14],
-            "updated_at": v[15],
+            "id": raw_data[0],
+            "first_name": raw_data[1],
+            "last_name": raw_data[2],
+            "phone_number": raw_data[3],
+            "email": raw_data[4],
+            "phone_type_id": raw_data[5],
+            "birthday": raw_data[6],
+            "company": raw_data[7],
+            "job": raw_data[8],
+            "department": raw_data[9],
+            "avatar_url": raw_data[10],
+            "is_favorite": bool(raw_data[12]),
+            "is_onTrash": bool(raw_data[13]),
+            "deleted_at": raw_data[14],
+            "created_at": raw_data[15],
+            "updated_at": raw_data[16],
         }
 
     def update(self, id: int, data: dict) -> bool:

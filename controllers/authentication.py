@@ -116,9 +116,11 @@ class RefreshTokenController:
             })
 
         except jwt.ExpiredSignatureError as e:
+            print(e)
             return HttpResponses.token_expired()
 
         except jwt.DecodeError as e:
+            print(e)
             return HttpResponses.token_invalid()
 
         except Exception as e:
